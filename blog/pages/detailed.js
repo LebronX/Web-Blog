@@ -2,13 +2,13 @@ import React from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
-import {Button,Row,Col} from 'antd'
+import {Row,Col} from 'antd'
 import Header from '../components/Header'
 
-const Home = () => (
+const Detailed = () => (
   <div>
       <Head>
-        <title>Home</title>
+        <title>Detailed</title>
       </Head>
       <Header />
       <Row className="comm-main" type="flex" justify="center">
@@ -22,4 +22,4 @@ const Home = () => (
   </div>
 )
 
-export default Home
+export default Detailed

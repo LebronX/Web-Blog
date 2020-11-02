@@ -1,9 +1,10 @@
 import React,{useState} from 'react'
 import Head from 'next/head'
-import Link from 'next/link'
-import styles from '../styles/Home.module.css'
 import {Row,Col,List} from 'antd'
 import Header from '../components/Header'
+import Author from '../components/Author'
+import Advert from '../components/Advert'
+import Footer from '../components/Footer'
 import {CalendarOutlined,FireOutlined,FolderOutlined} from '@ant-design/icons'
 import '../static/style/components/index.css'
 
@@ -46,9 +47,12 @@ const Home = () => {
 
       </Col>
       <Col className="comm-right" xs={0} sm={0} md={7} lg={5} xl={4} >
-        right
+        <Author />
+        <Advert />
       </Col>
     </Row>
+
+    <Footer></Footer>
   </div>
 )
 }

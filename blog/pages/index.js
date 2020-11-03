@@ -1,5 +1,6 @@
 import React,{useState} from 'react'
 import Head from 'next/head'
+import Link from 'next/link'
 import {Row,Col,List} from 'antd'
 import axios from 'axios'
 import Header from '../components/Header'
@@ -27,7 +28,11 @@ const Home = (list) => {
           dataSource={mylist}
           renderItem={item=>(
             <List.Item>
-              <div className="list-title">{item.title}</div>
+              <div className="list-title">
+                <Link href={{pathname:'/detailed',query:{id:item.id}}}>
+                  <a>{item.title}</a>
+                </Link>
+              </div>
               <div className="list-icon">
                 <span> <CalendarOutlined /> {item.addTime}</span>
                 <span> <FolderOutlined /> {item.typeName}</span>
@@ -51,11 +56,12 @@ const Home = (list) => {
 )
 }
 
+// getInitialProps 从sql获取数据给前端
 Home.getInitialProps = async ()=>{
   const promise = new Promise((resolve)=>{
     axios('http://127.0.0.1:7001/default/getArticleList').then(
       (res)=>{
-        console.log('----->', res.data)
+        //console.log('----->', res.data)
         resolve(res.data)
       }
     )

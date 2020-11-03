@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import Head from 'next/head'
-import {Row,Col,List} from 'antd'
+import {Row,Col,List,Breadcrumb} from 'antd'
 import {CalendarOutlined,FireOutlined,FolderOutlined} from '@ant-design/icons'
 import Header from '../components/Header'
 import Author from '../components/Author'
@@ -26,6 +26,14 @@ const MyList = () => {
     <Header />
     <Row className="comm-main" type="flex" justify="center">
       <Col className="comm-left" xs={24} sm={24} md={16} lg={18} xl={14} >
+
+        <div className="bread-div">
+          <Breadcrumb>
+            <Breadcrumb.Item><a href="/">Home</a></Breadcrumb.Item>
+            <Breadcrumb.Item>Video</Breadcrumb.Item>
+          </Breadcrumb>
+        </div>
+
         <List 
           header={<div>  New Blogs</div>}
           itemLayout="vertical"

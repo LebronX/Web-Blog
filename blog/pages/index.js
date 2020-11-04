@@ -9,10 +9,29 @@ import Advert from '../components/Advert'
 import Footer from '../components/Footer'
 import {CalendarOutlined,FireOutlined,FolderOutlined} from '@ant-design/icons'
 import '../static/style/components/index.css'
+import servicePath from '../config/apiURL'
+import marked from 'marked'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/monokai-sublime.css'
+
 
 const Home = (list) => {
 
   const [mylist,setMylist] = useState(list.data)
+  const renderer = new marked.Renderer()
+
+  marked.setOptions({
+    renderer:renderer,
+    gfm:true,
+    pedantic:false,
+    sanitize:false,
+    tables:true,
+    breaks:false,
+    smartLists:true,
+    highlight:function(code){
+      return hljs.highlightAuto(code).value
+    }
+  })
 
   return(
   <div>
@@ -38,7 +57,9 @@ const Home = (list) => {
                 <span> <FolderOutlined /> {item.typeName}</span>
                 <span> <FireOutlined /> {item.view_content} views</span>
               </div>
-              <div className="list-context">{item.introduction}</div>
+              <div className="list-context" 
+                dangerouslySetInnerHTML={{__html:marked(item.introduction)}}
+              ></div>
             </List.Item>
           )}
         />
@@ -59,7 +80,7 @@ const Home = (list) => {
 // getInitialProps 从sql获取数据给前端
 Home.getInitialProps = async ()=>{
   const promise = new Promise((resolve)=>{
-    axios('http://127.0.0.1:7001/default/getArticleList').then(
+    axios(servicePath.getArticleList).then(
       (res)=>{
         //console.log('----->', res.data)
         resolve(res.data)

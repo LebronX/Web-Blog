@@ -1,18 +1,52 @@
 import React, {useState} from 'react'
 import 'antd/dist/antd.css'
-import {Card,Input,Button,Spin} from 'antd'
+import {Card,Input,Button,Spin,message} from 'antd'
 import {UserOutlined, KeyOutlined} from '@ant-design/icons'
 import '../static/css/Login.css'
+import axios from 'axios'
+import servicePath from '../config/apiUrl'
 
-function Login(){
+function Login(props){
     const [userName, setUserName] = useState('')
     const [password, setPassword] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const checkLogin=()=>{
         setIsLoading(true)
-        setTimeout(()=>{
-            setIsLoading(false)
-        },1000)
+        if(!userName){
+            message.error('Username is empty!')
+            setTimeout(()=>{
+                setIsLoading(false)
+            },500)
+            return false
+        }else if(!password){
+            message.error('Password is empty!')
+            setTimeout(()=>{
+                setIsLoading(false)
+            },500)
+            return false
+        }
+        let dataProps = {
+            'userName':userName,
+            'password':password
+        }
+        
+        axios({
+            method:'post',
+            url:servicePath.checkLogin,
+            data:dataProps,
+            withCredentials:true
+        }).then(
+            res=>{
+                setIsLoading(false)
+                //window.alert(res.data.data)
+                if(res.data.data === 'Success'){
+                    localStorage.setItem('openId',res.data.openId)
+                    props.history.push('/index')
+                }else{
+                    message.error('Username or Password Error')
+                }
+            }
+        )
     }
 
     return (

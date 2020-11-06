@@ -1,11 +1,13 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import marked from 'marked'
 import '../static/css/AddArticle.css'
-import {Row,Col,Input,Select,Button,DatePicker} from 'antd'
+import {Row,Col,Input,Select,Button,DatePicker, message} from 'antd'
+import axios from 'axios'
+import servicePath from '../config/apiUrl.js'
 const {Option} = Select
 const {TextArea} = Input
 
-function AddArticle(){
+function AddArticle(props){
 
     const [articleId,setArticleId] = useState(0)  // 文章的ID，如果是0说明是新增加，如果不是0，说明是修改
     const [articleTitle,setArticleTitle] = useState('')   //文章标题
@@ -16,7 +18,11 @@ function AddArticle(){
     const [showDate,setShowDate] = useState()   //发布日期
     const [updateDate,setUpdateDate] = useState() //修改日志的日期
     const [typeInfo ,setTypeInfo] = useState([]) // 文章类别信息
-    const [selectedType,setSelectType] = useState(1) //选择的文章类别
+    const [selectedType,setSelectType] = useState('Choose article type') //选择的文章类别
+
+    useEffect(()=>{
+        getTypeInfo()
+    },[])
 
     marked.setOptions({
         renderer:marked.Renderer(),
@@ -41,6 +47,48 @@ function AddArticle(){
         setIntroducehtml(html)
     }
 
+    const getTypeInfo = ()=>{
+        axios({
+            method:'get',
+            url:servicePath.getTypeInfo,
+            withCredentials:true
+        }).then(
+            res=>{
+                if(res.data.data === "nologin"){
+                    console.log('hello world')
+                    localStorage.removeItem('openId')
+                    props.history.push('/')
+                }else{
+                    setTypeInfo(res.data.data)
+                }
+            }
+        )
+    }
+    
+    const selectTypeHandler = (value) =>{
+        setSelectType(value)
+    }
+    
+    const saveArticle=()=>{
+        if(!selectedType){
+            message.error('Choose Article Type!')
+            return false
+        }else if(!articleTitle){
+            message.error('Article Title can not be empty!')
+            return false
+        }else if(!articleContent){
+            message.error('Article Content can not be empty!')
+            return false
+        }else if(!introducemd){
+            message.error('Article Introduce can not be empty!')
+            return false
+        }else if(!showDate){
+            message.error('Release Date can not be empty!')
+            return false
+        }
+        message.success('Release!')
+    }
+
     return(
         <div>
             <Row gutter={5}>
@@ -48,13 +96,19 @@ function AddArticle(){
                     <Row gutter={10}>
                         <Col span={20}>
                             <Input 
+                                value={articleTitle}
                                 placeholder="Blog Title"
                                 size="large"
+                                onChange={e=>{setArticleTitle(e.target.value)}}
                             />
                         </Col>
                         <Col span={4}>
-                            <Select defaultValue="1" size="large">
-                                <Option value="1">Video Tutorial</Option>
+                            <Select defaultValue={selectedType} size="large" onChange={selectTypeHandler}>
+                                {
+                                    typeInfo.map((item,index)=>{
+                                        return (<Option key={index} value={item.Id}>{item.typeName}</Option>)
+                                    })
+                                }                       
                             </Select> 
                         </Col>
                     </Row>
@@ -80,7 +134,7 @@ function AddArticle(){
                         <Col span="24">
                             <Button size="large">Temp Article</Button>
                             &nbsp;
-                            <Button type="primary" size="large">Release Article</Button>
+                            <Button type="primary" size="large" onClick={saveArticle}>Release Article</Button>
                             <br/>
                         </Col>
                         <Col span="24">
@@ -99,6 +153,7 @@ function AddArticle(){
                         <Col span={12}>
                             <div className="date-select">
                                 <DatePicker 
+                                    onChange={(date, dateString)=>{setShowDate(dateString)}}
                                     placeholder="Release Date"
                                     size="large"
                                 />

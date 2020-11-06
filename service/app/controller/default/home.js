@@ -35,7 +35,6 @@ class HomeController extends Controller {
               'type.id as typeId ' +
               'FROM article LEFT JOIN type ON article.type_id = type.Id ' +
               'WHERE article.id=' + id
-    //console.log(id)
     const result = await this.app.mysql.query(sql)
     this.ctx.body = {data:result}
   }
@@ -49,7 +48,6 @@ class HomeController extends Controller {
   // Get Article list by type ID
   async getListById(){
     const id = this.ctx.params.id.substring(5)
-    console.log('hahah', this.ctx.params)
     const sql = 'SELECT article.id as id ,'+
               'article.title as title ,' +
               'article.introduction as introduction ,' +

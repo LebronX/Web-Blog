@@ -38,7 +38,6 @@ function Login(props){
         }).then(
             res=>{
                 setIsLoading(false)
-                //window.alert(res.data.data)
                 if(res.data.data === 'Success'){
                     localStorage.setItem('openId',res.data.openId)
                     props.history.push('/index')

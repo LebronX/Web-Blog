@@ -82,7 +82,6 @@ Home.getInitialProps = async ()=>{
   const promise = new Promise((resolve)=>{
     axios(servicePath.getArticleList).then(
       (res)=>{
-        //console.log('----->', res.data)
         resolve(res.data)
       }
     )

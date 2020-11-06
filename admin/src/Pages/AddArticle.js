@@ -86,7 +86,49 @@ function AddArticle(props){
             message.error('Release Date can not be empty!')
             return false
         }
-        message.success('Release!')
+
+        let dataProps = {}
+        dataProps.type_id = selectedType
+        dataProps.title = articleTitle
+        dataProps.article_content = articleContent
+        dataProps.introduction = introducemd
+        let dateText = showDate.replace('-', '/')
+        dataProps.addTime = (new Date(dateText).getTime()) / 1000 
+
+        if(articleId === 0){
+            dataProps.view_count = 0;
+            axios({
+                method: 'post',
+                url: servicePath.addArticle,
+                data: dataProps,
+                withCredentials: true
+            }).then(
+                res=>{
+                    setArticleId(res.data.insertId)
+                    if(res.data.isSuccess){
+                        message.success('Success Adding!')
+                    }else{
+                        message.error('Fail Adding!')
+                    }
+                }
+            )
+        }else{
+            dataProps.id = articleId
+            axios({
+                method: 'post',
+                url: servicePath.updateArticle,
+                data: dataProps,
+                withCredentials: true
+            }).then(
+                res=>{
+                    if(res.data.isSuccess){
+                        message.success('Success Saving!')
+                    }else{
+                        message.error('Fail Saving!')
+                    }
+                }
+            )
+        }
     }
 
     return(

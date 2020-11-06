@@ -31,7 +31,22 @@ class MainController extends Controller{
     async addArticle(){
         let tmpArticle = this.ctx.request.body
         const result = await this.app.mysql.insert('article', tmpArticle)
-        const 
+        const insertSucess = result.affectedRows === 1
+        const insertId = result.insertId
+
+        this.ctx.body={
+            isSuccess: insertSucess,
+            insertId: insertId
+        }
+    }
+
+    async updateArticle(){
+        let tempArticle = this.ctx.request.body
+        const result = await this.app.mysql.update('article', tempArticle)
+        const updateSuccess = result.affectedRows === 1
+        this.ctx.body={
+            isSuccess: updateSuccess
+        }
     }
 
 }

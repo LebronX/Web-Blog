@@ -1,5 +1,5 @@
 import React,{useState} from 'react'
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Layout, Menu, Breadcrumb, message } from 'antd';
 import {
   DesktopOutlined,
   PieChartOutlined,
@@ -9,7 +9,7 @@ import {
 import '../static/css/AdminIndex.css'
 import {Route} from 'react-router-dom'
 import AddArticle from './AddArticle.js'
-import ArticleList from './ArticleList.js'
+import ArticleList from './ArticleList'
 import { OmitProps } from 'antd/lib/transfer/ListBody';
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -24,6 +24,7 @@ function AdminIndex(props) {
     };
 
     const handleClickArticle = e =>{
+      //message.error(e.key)
       if(e.key === 'addArticle'){
         props.history.push('/index/add')
       }else{
@@ -43,7 +44,11 @@ function AdminIndex(props) {
             <Menu.Item key="2" icon={<DesktopOutlined />}>
               Add Article
             </Menu.Item>
-            <SubMenu key="sub1" onClick={handleClickArticle} icon={<UserOutlined />} title="Article Management">
+            <SubMenu
+              key="sub1" 
+              onClick={handleClickArticle}
+              icon={<UserOutlined />} 
+              title="Article Management">
               <Menu.Item key="addArticle">Add Article</Menu.Item>
               <Menu.Item key="articleList">Article List</Menu.Item>
             </SubMenu>

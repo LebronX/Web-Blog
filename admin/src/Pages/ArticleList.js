@@ -2,36 +2,53 @@ import React,{useState, useEffect} from 'react'
 import {List, Row, Col, Button, Modal, message} from 'antd'
 import axios from 'axios'
 import servicePath from '../config/apiUrl.js'
+import '../static/css/ArticleList.css'
 const {confirm} = Modal
 
 function ArticleList(props){
     const [list, setList] = useState([])
+
+    useEffect(()=>{
+        getList()
+    },[])
+
+    const getList =()=>{
+        axios({
+            method: 'get',
+            url: servicePath.getArticleList,
+            withCredentials: true,
+        }).then(
+            res=>{
+                setList(res.data.list)
+            }
+        )
+    }
     return (
         <div>
-            <List 
+            <List
                 header={
                     <Row className="list-div">
                         <Col span={8}>
-                            <b>Title</b>
+                            <b>标题</b>
                         </Col>
                         <Col span={4}>
-                            <b>Type</b>
+                            <b>类别</b>
                         </Col>
                         <Col span={4}>
-                            <b>Release Time</b>
+                            <b>发布时间</b>
                         </Col>
                         <Col span={4}>
-                            <b>View Count</b>
+                            <b>浏览量</b>
                         </Col>
                         <Col span={4}>
-                            <b>Operation</b>
+                            <b>操作</b>
                         </Col>
                     </Row>
                 }
                 bordered
                 dataSource = {list}
-                renderItem = {item=>{
-                    <List.item>
+                renderItem = {item => (
+                    <List.Item>
                         <Row className="list-div">
                             <Col span={8}>
                                 {item.title}
@@ -50,11 +67,13 @@ function ArticleList(props){
                                 <Button>Delete</Button>
                             </Col>
                         </Row>
-                    </List.item>
-                }}
+                    </List.Item>
+                )}
             />
         </div>
     )
 }
 
 export default ArticleList
+
+
